@@ -1,50 +1,53 @@
-from fastapi import FastAPI, Body
+from fastapi import FastAPI
 
 app = FastAPI()
-COURSES = [
-    {'title': 'Python Fundamentals', 'trainer': 'Alex', 'level': 'beginner'},
-    {'title': 'Java Backend', 'trainer': 'Maria', 'level': 'intermediate'},
-    {'title': 'QA Automation', 'trainer': 'Victor', 'level': 'beginner'},
-    {'title': 'Web Basics', 'trainer': 'Elena', 'level': 'beginner'},
-    {'title': 'Databases', 'trainer': 'Andrei', 'level': 'intermediate'},
-    {'title': 'System Design', 'trainer': 'Irina', 'level': 'advanced'}
-]
 
-@app.get('/courses')
+COURSES = [
+    Courses(id: 1,
+            title: "Mathematics",
+            trainer: "John Smith",
+            description: "Fundamentals of math",
+            duration_weeks: 4
+),
+    Courses(id: 2,
+            title: "Computer Science",
+            trainer: "Marry Poppins",
+            description: "Fundamentals of computer science",
+            duration_weeks: 8
+),
+    Courses(id: 3,
+            title: "Java Backend",
+            trainer: "Martin Morgan",
+            description: "OOP, variables and loops",
+            duration_weeks: 3
+),
+    Courses(id: 4,
+            title: "Python",
+            trainer: "Andrew Louder",
+            description: "Python & Python Pro",
+            duration_weeks: 5
+),
+  Courses(id: 5,
+            title: "Databases",
+            trainer: "Mark Michigan",
+            description: "Lorem ipsum description",
+            duration_weeks: 20
+),
+
+@app.get("/courses")
 async def read_all_courses():
     return COURSES
 
-@app.get('/courses/{course_title}')
-async def read_course(course_title: str):
-    for course in COURSES:
-        if course.get('title').casefold() == course_title.casefold():
-            return course
 
-
-@app.get('/courses/bytrainer/')
-async def read_courses_by_trainer(trainer: str):
-    courses_to_return = []
-    for course in COURSES:
-        if course.get('trainer').casefold() == trainer.casefold():
-            courses_to_return.append(course)
-
-    return course
-
-@app.post('/courses/create_course/')
-async def create_course(new_course=Body()):
-    COURSES.append(new_course)
-
-
-@app.put('/courses/update_course/')
-async def update_course (updated_course=Body()):
-    for i in range(len(COURSES)):
-        if COURSES[i].get('title').casefold() == updated_course.get('title').casefold():
-            COURSES[i] = updated_course
-
-
-@app.delete('/courses/delete_course/{course_title}')
-async def delete_course(course_title: str):
-    for i in range(len(COURSES)):
-        if COURSES[i].get('title').casefold() == course_title.casefold():
-            COURSES.pop(i)
-            break
+class Course:
+    id:             int
+    title:          str
+    trainer:        str
+    description:    str
+    duration_weeks: int
+    def __init__(self, id, title, trainer, description, duration_weeks):
+        self.id             = id
+        self.title          = title
+        self.trainer        = trainer
+        self.description    = description
+        self.duration_weeks = duration_weeks
